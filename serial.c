@@ -88,6 +88,7 @@ static void serial_ev_cb(struct ev_loop *loop, struct ev_io *watcher, int revent
         if(count <= 0)
         {
             LOG_ERROR("read error");
+	    ev_break (EV_A_ EVBREAK_ALL);
             return;
         }
         else

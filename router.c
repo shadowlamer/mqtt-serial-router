@@ -172,10 +172,7 @@ int main(int argc, char *argv[])
         LOG_CRITICAL("failed to connect to server");
     }
 
-    while(1)
-    {
-        ev_loop(g_srvctx.loop, 0);
-    }
+    ev_run(g_srvctx.loop, 0);
 
     return 0;
 }

@@ -1,0 +1,7 @@
+
+*.a
+*.o
+*.so
+*.out
+0bj/
+router
