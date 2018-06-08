@@ -176,7 +176,7 @@ static void handle_command(int argc, char **argv)
 
         snprintf(mqtt_topic, sizeof(mqtt_topic), "%s%s", get_topic_prefix(), argv[2]);
         LOG_INFO("mqtt publish %s = %s", mqtt_topic, argv[3]);
-        if (0 != mqtt_publish(&(g_srvctx.mqttctx), mqtt_topic, argv[3], 1, &mid))
+        if (0 != mqtt_publish(&(g_srvctx.mqttctx), mqtt_topic, argv[3], 2, &mid))
         {
             LOG_ERROR("MQTT publish failed");
         }
