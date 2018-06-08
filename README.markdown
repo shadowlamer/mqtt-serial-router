@@ -20,6 +20,17 @@ Quickstart
 Build it
 
     sudo apt-get install libev-dev libmosquitto0-dev
+    cmake .
+    make
+
+Cross-build for armhf platform
+
+    sudo dpkg --add-architecture armhf
+    sudo apt-get update
+    sudo apt-get install libc6-armhf-cross libc6-dev-armhf-cross
+    sudo apt-get install binutils-arm-linux-gnueabihf gcc-arm-linux-gnueabihf g++-arm-linux-gnueabihf
+    sudo apt-get install libev-dev:armhf libmosquitto-dev:armhf
+    cmake . -DCMAKE_TOOLCHAIN_FILE=cmake_toolchains/ubuntu-armhf.cmake
     make
 
 Connect to console and MQTT broker, subscribe two clients to a topic

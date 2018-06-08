@@ -58,6 +58,6 @@ build
 
 *.sh
 
-router
+mqtt-serial-router
 
 # End of https://www.gitignore.io/api/c++,cmake
