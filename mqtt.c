@@ -260,7 +260,7 @@ int mqtt_publish(mqtt_context_t *mqttctx, const char *topic, const char *msg, in
     int rc;
     MOSQ_MID_T m;
 
-    rc = mosquitto_publish(mqttctx->mosq, &m, topic, strlen(msg), (const uint8_t *)msg, qos, true);
+    rc = mosquitto_publish(mqttctx->mosq, &m, topic, strlen(msg), (const uint8_t *)msg, qos, false);
     LOG_DEBUG("mqtt_publish topic=%s msg=%s rc=%d", topic, msg, rc);
 
     if (NULL != mid)
