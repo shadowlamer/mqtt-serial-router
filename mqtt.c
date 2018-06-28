@@ -217,9 +217,9 @@ int mqtt_connect(mqtt_context_t *mqttctx, const char *name, const char *host, ui
     g_srvctx.mqtt_port = port;
 
 #if LIBMOSQUITTO_VERSION_NUMBER <= 1000000
-    if (0 != mosquitto_connect(mqttctx->mosq, g_srvctx.mqtt_server, g_srvctx.mqtt_port, 5, true)) // FIXME, this should be async, with below in cb
+    if (0 != mosquitto_connect(mqttctx->mosq, g_srvctx.mqtt_server, g_srvctx.mqtt_port, -1, true)) // FIXME, this should be async, with below in cb
 #else
-    if (0 != mosquitto_connect(mqttctx->mosq, g_srvctx.mqtt_server, g_srvctx.mqtt_port, 5)) // FIXME, this should be async, with below in cb
+    if (0 != mosquitto_connect(mqttctx->mosq, g_srvctx.mqtt_server, g_srvctx.mqtt_port, -1)) // FIXME, this should be async, with below in cb
 #endif
     {
         LOG_INFO("mqtt connect failed");
