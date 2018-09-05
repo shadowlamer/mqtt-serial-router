@@ -16,6 +16,7 @@
 
 #include <common/logging.h>
 #include <common/common.h>
+#include <time.h>
 
 #include "serial.h"
 #include "line.h"
@@ -164,6 +165,7 @@ static void handle_command(int argc, char **argv)
 {
     char escbuf[MAX_ESCAPED_STR];
     char mqtt_topic[4096];
+    char json_buf[4096];
 
     if (argc >= 5 && 0 == strcmp(argv[0], "PUB"))
     {
@@ -175,8 +177,9 @@ static void handle_command(int argc, char **argv)
         addr_str = argv[1];
 
         snprintf(mqtt_topic, sizeof(mqtt_topic), "%s%s", get_topic_prefix(), argv[2]);
-        LOG_INFO("mqtt publish %s = %s", mqtt_topic, argv[3]);
-        if (0 != mqtt_publish(&(g_srvctx.mqttctx), mqtt_topic, argv[3], 2, &mid))
+        snprintf(json_buf, sizeof(json_buf), "{\"timestamp\":%d,\"message\":%s}", (int)time(NULL), argv[3]);
+        LOG_INFO("mqtt publish %s = %s", mqtt_topic, json_buf);
+        if (0 != mqtt_publish(&(g_srvctx.mqttctx), mqtt_topic, json_buf, 2, &mid))
         {
             LOG_ERROR("MQTT publish failed");
         }
