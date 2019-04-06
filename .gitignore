@@ -45,6 +45,7 @@ cmake_install.cmake
 install_manifest.txt
 compile_commands.json
 CTestTestfile.cmake
+cmake-build*
 build
 
 
@@ -57,6 +58,9 @@ build
 .history
 
 *.sh
+
+### CLion
+.idea
 
 mqtt-serial-router
 
