@@ -1,0 +1,26 @@
+#!/bin/bash
+
+SERVICE="mqtt-serial-router"
+
+# Based off what debhelper would have added
+
+set -e
+
+if [ "$1" = "remove" ]; then
+    if [ -x "/usr/bin/deb-systemd-helper" ]; then
+        deb-systemd-helper mask ${SERVICE}.service >/dev/null
+    fi
+fi
+
+if [ "$1" = "purge" ]; then
+    if [ -x "/usr/bin/deb-systemd-helper" ]; then
+        deb-systemd-helper purge ${SERVICE}.service >/dev/null
+        deb-systemd-helper unmask ${SERVICE}.service >/dev/null
+    fi
+
+    rm -rf /var/run/sbsession
+fi
+
+if [ -d /run/systemd/system ]; then
+    systemctl --system daemon-reload >/dev/null || true
+fi

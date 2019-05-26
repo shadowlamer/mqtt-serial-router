@@ -1,0 +1,17 @@
+[Unit]
+Description=MQTT serial router
+StartLimitInterval=0
+After=mosquitto.service
+Requires=mosquitto.service
+PartOf=mosquitto.service
+
+[Service]
+Type=simple
+Restart=always
+RestartSec=1
+User=root
+Group=root
+ExecStart=/usr/bin/mqtt-serial-router -d /dev/ttyS10 -s localhost -p 1883 -t local/
+
+[Install]
+WantedBy=multi-user.target
