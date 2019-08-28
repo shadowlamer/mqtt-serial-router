@@ -1,25 +1,22 @@
 cmake_minimum_required(VERSION 3.0)
 
-set(TARGET mqtt-serial-router)
-set(TARGET_VERSION "0.0.7")
-
-project(${TARGET})
+project("mqtt-serial-router" LANGUAGES C VERSION "0.0.8")
 
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake_modules")
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Werror")
 
 AUX_SOURCE_DIRECTORY(. C_SOURCES)
-add_executable( ${TARGET} ${C_SOURCES} common/logging.c)
+add_executable( ${PROJECT_NAME} ${C_SOURCES} common/logging.c)
 
 find_package (Mosquitto REQUIRED)
 find_package (Libev REQUIRED)
 
 include_directories(. ${MOSQUITTO_INCLUDE_DIR} ${LIBEV_INCLUDE_DIR})
-target_link_libraries (${TARGET} ${MOSQUITTO_LIBRARIES} ${LIBEV_LIBRARIES})
+target_link_libraries (${PROJECT_NAME} ${MOSQUITTO_LIBRARIES} ${LIBEV_LIBRARIES})
 
-install(TARGETS ${TARGET} DESTINATION bin)
-install(FILES ${CMAKE_SOURCE_DIR}/deb/${TARGET}.service DESTINATION /lib/systemd/system)
+install(TARGETS ${PROJECT_NAME} DESTINATION bin)
+install(FILES ${CMAKE_SOURCE_DIR}/deb/${PROJECT_NAME}@.service DESTINATION /lib/systemd/system)
 install(FILES ${CMAKE_SOURCE_DIR}/deb/mosquitto.service DESTINATION /lib/systemd/system)
 
 if (NOT DEFINED PACKAGE_ARCHITECTURE)
@@ -31,8 +28,8 @@ if (NOT DEFINED PACKAGE_ARCHITECTURE)
 endif()
 
 set(CPACK_GENERATOR "DEB")
-set(CPACK_PACKAGE_NAME "${TARGET}")
-set(CPACK_PACKAGE_VERSION "${TARGET_VERSION}")
+set(CPACK_PACKAGE_NAME "${PROJECT_NAME}")
+set(CPACK_PACKAGE_VERSION "${PROJECT_VERSION}")
 set(CPACK_PACKAGE_FILE_NAME "${CPACK_PACKAGE_NAME}_${CPACK_PACKAGE_VERSION}_${PACKAGE_ARCHITECTURE}")
 set(CPACK_DEBIAN_PACKAGE_SECTION "non-free")
 set(CPACK_DEBIAN_PACKAGE_MAINTAINER "Vadim Cherenev <sl@anhot.ru>")
