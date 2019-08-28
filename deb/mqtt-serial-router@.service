@@ -11,7 +11,7 @@ Restart=always
 RestartSec=1
 User=root
 Group=root
-ExecStart=/usr/bin/mqtt-serial-router -d /dev/ttyS10 -s localhost -p 1883 -t local/
+ExecStart=/usr/bin/mqtt-serial-router -d /dev/%i -c msr-%i -s localhost -p 1883 -t local/
 
 [Install]
 WantedBy=multi-user.target

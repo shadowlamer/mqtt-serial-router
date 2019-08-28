@@ -33,11 +33,10 @@
 #include "serial.h"
 #include "escape.h"
 
-#define CLIENT_NAME "smr"
-
 server_context_t g_srvctx;
 
 static char *device_name = NULL;
+static char *client_name = NULL;
 static char *server = NULL;
 static int port = -1;
 static bool verbose = false;
@@ -47,6 +46,7 @@ static struct option long_options[] =
 {
     {"help",    no_argument, 0, 'h'},
     {"device",     required_argument, 0, 'd'},
+    {"client",     required_argument, 0, 'c'},
     {"server",     required_argument, 0, 's'},
     {"port",       required_argument, 0, 'p'},
     {"verbose",    no_argument, 0, 'v'},
@@ -61,14 +61,23 @@ const char *get_topic_prefix(void)
 
 void timeout_1hz_cb(struct ev_loop *loop, struct ev_io *watcher, int revents)
 {
+    (void) loop;
+    (void) watcher;
+    (void) revents;
 }
 
 void timeout_10hz_cb(struct ev_loop *loop, struct ev_io *watcher, int revents)
 {
+    (void) loop;
+    (void) watcher;
+    (void) revents;
 }
 
 void idle_cb(struct ev_loop *loop, struct ev_idle *w, int revents)
 {
+    (void) loop;
+    (void) w;
+    (void) revents;
 }
 
 void usage(void)
@@ -77,6 +86,7 @@ void usage(void)
     fprintf(stderr, "router -v -d - -s test.mosquitto.org -p 1883 -t prefix/\n");
     fprintf(stderr, "  --verbose                    -v     Chatty mode\n");
     fprintf(stderr, "  --device=/dev/ttyAMA0        -d     Serial device\n");
+    fprintf(stderr, "  --client=test_client         -c     Client name\n");
     fprintf(stderr, "  --server=test.mosquitto.org  -s     MQTT broker host\n");
     fprintf(stderr, "  --port=1883                  -p     MQTT broker port\n");
     fprintf(stderr, "  --topic=topic/tree/          -t     MQTT topic prefix\n");
@@ -91,17 +101,19 @@ int parse_options(int argc, char **argv)
 
     while(1)
     {
-        c = getopt_long (argc, argv, "t:vhd:s:p:", long_options, &option_index);
+        c = getopt_long (argc, argv, "t:vhd:c:s:p:", long_options, &option_index);
         if (c == -1)
             break;
         switch(c)
         {
             case 'h':
                 return 1;
-            break;
             case 'd':
                 device_name = strdup(optarg);
-            break;
+                break;
+            case 'c':
+                client_name = strdup(optarg);
+                break;
             case 't':
                 topic_prefix = strdup(optarg);
                 len = strlen(topic_prefix);
@@ -122,11 +134,10 @@ int parse_options(int argc, char **argv)
             break;
             default:
                 return 1;
-            break;
         }
     }
 
-    if (NULL == device_name || NULL == server || -1 == port || NULL == topic_prefix)
+    if (NULL == device_name || NULL == client_name || NULL == server || -1 == port || NULL == topic_prefix)
         return 1;
 
     return 0;
@@ -167,7 +178,7 @@ int main(int argc, char *argv[])
         LOG_CRITICAL("Failed to open %s", device_name);
     }
 
-    if (0 != mqtt_connect(&(g_srvctx.mqttctx), CLIENT_NAME, server, port))
+    if (0 != mqtt_connect(&(g_srvctx.mqttctx), client_name, server, port))
     {
         LOG_CRITICAL("failed to connect to server");
     }

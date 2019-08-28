@@ -1,6 +1,6 @@
 #!/bin/bash
 
-SERVICE="mqtt-serial-router"
+SERVICE="mqtt-serial-router@" 
 
 # Based off what debhelper would have added
 
